@@ -1,5 +1,0 @@
-Web Scrapping:
-Extract data from websites and storage somewhere that later will be used to data analysis or similar
-
-Web Crawling:
-Extract url,branches, etc. Find links, urls that match a pattern
