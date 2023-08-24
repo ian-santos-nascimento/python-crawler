@@ -16,6 +16,7 @@
 
 - ## Tutorial for run the project
 - Go to diario_oficial_crawler
+- If you Execute utils/utils.py it will give you a list in proxy_valid_list/proxy_list.txt (that is the file we will be using for proxy)
 - Inside the project paste this command in terminal: scrapy crawl myCrawler -o ouput.json
 - See the "pdfs" folder, it contains the top 10 words (tokenized) of the file
 - See the output.json (if you let the crawler finish) that will contain all the pdfs that was crawled

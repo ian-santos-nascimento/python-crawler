@@ -11,25 +11,35 @@ from collections import Counter
 import io
 from contextlib import redirect_stdout
 import os
+from random import choice
 
 nltk.download('punkt')
 nltk.download('stopwords')
 
-
 # For this example I will be using only 2023 files and pages. Later can be implemented a crawler for the entire site
+
+def getproxy_list():
+    proxy_list = []
+    with open(f'{os.path.abspath(os.curdir)}/diario_oficial_crawler/proxy_valid_list/proxy_list.txt', 'r') as f:
+        proxy_list = f.read().split("\n")
+    return proxy_list
+
+
 class CrawlSpiderExample(CrawlSpider):
     name = "myCrawler"
     start_urls = ["https://www.imprensaoficial.rr.gov.br/app/"]
     rules = ([
-        Rule(LinkExtractor(allow=r"_visualizar-mes/"), callback='parse_item')
+        Rule(LinkExtractor(allow=r"_visualizar-mes/"), callback='build_pdf_request')
     ])
 
-    def parse_item(self, response):
+    def build_pdf_request(self, response):
+        proxy_list = getproxy_list()
+        proxy_for_request = choice(proxy_list)
         table_row = response.css("tbody")
         for row in table_row:
             item = {
                 'doe': row.css("form > input[type=hidden][name=doe]::attr(value)").get(),
-                'ipconexao': row.css("form > input[type=hidden][name=ipconexao]::attr(value)").get(),
+                'ipconexao': proxy_for_request,
                 'dia': row.css("form > input[type=hidden][name=dia]::attr(value)").get(),
                 'mes': row.css("form > input[type=hidden][name=mes]::attr(value)").get(),
                 'ano': row.css("form > input[type=hidden][name=ano]::attr(value)").get(),
